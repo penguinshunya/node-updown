@@ -6,5 +6,9 @@ html
     script(src='https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js')
     script(src='/javascripts/index.js')
   body
-    h1= title
-    p Welcome to #{title}
+    ul#files
+      - files.forEach(function(obj) {
+      li
+        a(href='/download/#{obj.filename}', download='#{obj.originalname}') #{obj.originalname}
+        button.deleteButton(type='button', data-filename='#{obj.filename}') 削除
+      - });
