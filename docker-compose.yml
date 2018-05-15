@@ -4,12 +4,16 @@ services:
 
   node:
     image: node
-    stdin_open: true
-    tty: true
+    restart: always
     ports:
       - 8000:80
     volumes:
-      - ./:/share
+      - .:/share
+    environment:
+      PORT: 80
+      MONGODB: mongo:27017
+    command: >
+      bash -c "cd /share && npm install && npm start"
 
   mongo:
     image: mongo
