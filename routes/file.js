@@ -1,6 +1,6 @@
 var MongoClient = require('mongodb').MongoClient;
 
-// MONGODB_URL環境変数から、MongoDBのURLを取得する
+// MONGODB環境変数から、MongoDBのURLを取得する
 const url = `mongodb://${ process.env.MONGODB || '127.0.0.1:27017' }`;
 
 exports.insert = function(file, callback) {

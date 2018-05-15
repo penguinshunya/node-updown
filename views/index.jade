@@ -1,5 +1,8 @@
 extends template
 
+block stylesheet
+  link(rel='stylesheet', href='/stylesheets/index.css')
+
 block filebox
   .file.mb-3.shadow
     .file-body
@@ -12,3 +15,6 @@ block content
     .row#files
       .file-box.col-md-3(ng-repeat='file in files')
         block filebox
+
+block javascript
+  script(src='/javascripts/index.js')
