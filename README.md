@@ -18,7 +18,7 @@
 
 ## 手順2
 
-Node.jsとMongoDBをインストールしていなくても、Docker ComposeがあればWebサーバを起動できる手順です。
+Node.jsとMongoDBをインストールしていなくても、Docker ComposeがインストールされていればWebサーバを起動できます。
 
 ```
 $ git clone https://github.com/penguinshunya/node-updown.git
@@ -30,7 +30,8 @@ $ docker-compose exec node bash
 # env PORT=80 MONGODB=mongo:27017 npm start
 ```
 
-ホストOSから[http://localhost:8000/](http://localhost:8000/)にアクセスすることで、Webアプリを利用できます。ポート番号を変更する場合は、docker-compose.ymlの`- 8000:80`を書き換えます。
+ホストOSから[http://localhost:8000/](http://localhost:8000/)にアクセスすることで、Webアプリを利用できます。  
+ポート番号を変更する場合は、docker-compose.ymlの`- 8000:80`を書き換えます。
 
 ## 改善すべき点
 
