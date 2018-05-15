@@ -1,39 +1,46 @@
 $(function() {
-  const addFileList = function(file) {
-    $('#files').append(
-      $('<li>').append(
-        $('<a>')
-          .attr('href', `/download/${file.filename}`)
-          .attr('download', file.originalname)
-          .text(file.originalname),
-        $('<button>')
-          .addClass('deleteButton')
-          .attr('type', 'button')
-          .data('filename', file.filename)
-          .text('削除')
-      )
-    );
-  };
-
   $('html').on('drop', function(e) {
     e.stopPropagation();
     e.preventDefault();
 
     const files = e.originalEvent.dataTransfer.files;
-    const data = new FormData();
     $.each(files, function(_, file) {
-      data.append('files', file);
-    });
+      const li = $('<li>').append(file.name);
+      const progress = $('<progress>').val(0).attr('max', 100);
 
-    $.ajax({
-      url: '/upload',
-      type: 'POST',
-      data: data,
-      processData: false,
-      contentType: false,
-      dataType: 'json'
-    }).done(function(files) {
-      files.forEach(addFileList);
+      $('#files').append(li);
+      li.append(progress);
+
+      const data = new FormData();
+      data.append('file', file);
+
+      $.ajax({
+        url: '/upload',
+        type: 'POST',
+        data: data,
+        processData: false,
+        contentType: false,
+        dataType: 'json',
+        xhr: function() {
+          var xhr = $.ajaxSettings.xhr();
+          xhr.upload.addEventListener('progress', function(e) {
+            progress.val(e.loaded / e.total * 100);
+          });
+          return xhr;
+        }
+      }).done(function(file) {
+        li.empty();
+        li.append(
+          $('<a>')
+            .attr('href', `/download/${file.filename}`)
+            .text(file.originalname),
+          $('<button>')
+            .addClass('deleteButton')
+            .attr('type', 'button')
+            .data('filename', file.filename)
+            .text('削除')
+        );
+      });
     });
   });
 

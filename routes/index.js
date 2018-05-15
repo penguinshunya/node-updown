@@ -22,7 +22,7 @@ router.get('/', function(req, res, next) {
 });
 
 /* POST upload files. */
-router.post('/upload', upload.array('files'), function(req, res, next) {
+router.post('/upload', upload.single('file'), function(req, res, next) {
 
   // MongoDBに接続し、DBにファイル情報を格納する
   // http://mongodb.github.io/node-mongodb-native/3.0/
@@ -30,19 +30,18 @@ router.post('/upload', upload.array('files'), function(req, res, next) {
   MongoClient.connect(url, { useNewUrlParser: true }, function(err, client) {
     const db = client.db('updown');
 
-    db.collection('files').insertMany(req.files.map(function(obj) {
-      return {
-        filename: obj.filename,
-        originalname: obj.originalname,
-        mimetype: obj.mimetype,
-        size: obj.size
-      };
-    }), function(err, result) {
+    db.collection('files').insertOne({
+      filename: req.file.filename,
+      originalname: req.file.originalname,
+      mimetype: req.file.mimetype,
+      size: req.file.size
+    }, function(err, result) {
       client.close();
 
-      res.end(JSON.stringify(req.files.map(function(obj) {
-        return { filename: obj.filename, originalname: obj.originalname };
-      })));
+      res.end(JSON.stringify({
+        filename: req.file.filename,
+        originalname: req.file.originalname
+      }));
     });
   });
 });
@@ -51,8 +50,15 @@ router.post('/upload', upload.array('files'), function(req, res, next) {
 router.get('/download/:filename', function(req, res, next) {
   const filename = req.params.filename;
 
-  fs.readFile(`./uploads/${filename}`, function(err, data) {
-    res.send(data);
+  MongoClient.connect(url, { useNewUrlParser: true }, function(err, client) {
+    const db = client.db('updown');
+
+    db.collection('files').findOne({ filename: filename }, function(err, file) {
+      client.close();
+
+      // http://expressjs.com/ja/4x/api.html#res.download
+      res.download(`./uploads/${filename}`, file.originalname);
+    });
   });
 });
 
