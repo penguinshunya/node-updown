@@ -1,9 +1,14 @@
 extends template
 
+block filebox
+  .file.mb-3.shadow
+    .file-body
+      .file-text: a(href='/download/{{ file.filename }}') {{ file.originalname }}
+      .d-flex.justify-content-between.align-items-center
+        button.delete.btn.btn-sm.btn-outline-secondary(type='button', data-filename='{{ file.filename }}') 削除
+
 block content
-  ul#files
-    - files.forEach(function(obj) {
-    li
-      a(href='/download/#{obj.filename}') #{obj.originalname}
-      button.deleteButton(type='button', data-filename='#{obj.filename}') 削除
-    - });
+  .container(ng-controller='UpdownController')
+    .row#files
+      .file-box.col-md-3(ng-repeat='file in files')
+        block filebox

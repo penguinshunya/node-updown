@@ -1,5 +1,5 @@
 doctype html
-html(lang='ja')
+html(lang='ja', ng-app='updownApp')
   head
     meta(charset='UTF-8')
     meta(name='viewport', content='width=device-width, initial-scale=1, shrink-to-fit=no')
@@ -7,6 +7,7 @@ html(lang='ja')
     link(rel='stylesheet', href='https://stackpath.bootstrapcdn.com/bootstrap/4.1.1/css/bootstrap.min.css',
       integrity='sha384-WskhaSGFgHYWDcbwN70/dfYBj47jz9qbsMId/iRN3ewGhXQFZCSftd1LZCfmhktB',
       crossorigin='anonymous')
+    link(rel='stylesheet', href='/stylesheets/index.css')
   body
     block content
     script(src='https://code.jquery.com/jquery-3.3.1.min.js',
@@ -18,4 +19,5 @@ html(lang='ja')
     script(src='https://stackpath.bootstrapcdn.com/bootstrap/4.1.1/js/bootstrap.min.js',
       integrity='sha384-smHYKdLADwkXOn1EmN1qk/HfnUcbVRZyYmZ4qpPea6sjB/pTJ0euyQp0Mk8ck+5T',
       crossorigin='anonymous')
+    script(src='https://ajax.googleapis.com/ajax/libs/angularjs/1.6.9/angular.min.js')
     script(src='/javascripts/index.js')
