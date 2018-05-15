@@ -2,21 +2,9 @@
 
 - ドラッグ&ドロップで簡単に、複数のファイルを一括アップロードできます
 - アップロードしたファイルのダウンロードが行えます
-- Node.jsとMongoDBサーバさえあれば動きます
-- 複雑な設定は必要ありません。必要な情報は、MongoDBサーバのIPアドレスとポート番号だけです
+- 事前準備として必要なのは、GitとDocker Composeのインストールだけです
 
 ## 手順
-
-```
-# git clone https://github.com/penguinshunya/node-updown.git
-# cd node-updown
-# npm install
-# env PORT=80 MONGODB=172.17.0.4:27017 npm start
-```
-
-※PORT環境変数の初期値は'3000'、MONGODB環境変数の初期値は'127.0.0.1:27017'です。
-
-## 手順2
 
 Node.jsとMongoDBサーバがなくても、Docker ComposeがあればWebサーバを起動できます。
 
@@ -27,8 +15,8 @@ $ docker-compose up -d
 ```
 
 ホストOSから[http://localhost:8000/](http://localhost:8000/)にアクセスすることで、Webアプリを利用できます。  
-ポート番号を変更する場合は、docker-compose.ymlの`- 8000:80`を書き換えます。  
-PORT環境変数及びMONGODB環境変数は、docker-compose.ymlで変更できます。
+
+ポート番号を変更する場合は、docker-compose.ymlの`- 8000:80`を書き換えます。PORT環境変数の初期値は'3000'、MONGODB環境変数の初期値は'127.0.0.1:27017'です。共に、docker-compose.ymlで変更可能です。
 
 ## 改善すべき点
 
