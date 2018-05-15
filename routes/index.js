@@ -6,7 +6,7 @@ var router = express.Router();
 var upload = multer({ dest: './uploads/' });
 
 // MONGODB_URL環境変数から、MongoDBのURLを取得する
-const url = `mongodb://${ process.env.MONGODB }`;
+const url = `mongodb://${ process.env.MONGODB || '127.0.0.1:27017' }`;
 
 /* GET home page. */
 router.get('/', function(req, res, next) {
