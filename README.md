@@ -6,8 +6,6 @@
 
 ## 手順
 
-Node.jsとMongoDBサーバがなくても、Docker ComposeがあればWebサーバを起動できます。
-
 ```
 $ git clone https://github.com/penguinshunya/node-updown.git
 $ cd node-updown
