@@ -24,14 +24,11 @@ Node.jsとMongoDBサーバがなくても、Docker ComposeがあればWebサー�
 $ git clone https://github.com/penguinshunya/node-updown.git
 $ cd node-updown
 $ docker-compose up -d
-$ docker-compose exec node bash
-# cd /share
-# npm install
-# env PORT=80 MONGODB=mongo:27017 npm start
 ```
 
 ホストOSから[http://localhost:8000/](http://localhost:8000/)にアクセスすることで、Webアプリを利用できます。  
 ポート番号を変更する場合は、docker-compose.ymlの`- 8000:80`を書き換えます。
+PORT環境変数及びMONGODB環境変数は、docker-compose.ymlで変更できます。
 
 ## 改善すべき点
 
