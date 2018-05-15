@@ -16,7 +16,7 @@ router.get('/', function(req, res, next) {
     // ファイル情報のリストをPugファイルに渡す
     db.collection('files').find({}).toArray(function(err, files) {
       client.close();
-      res.render('index', { title: 'Express', files: files });
+      res.render('index', { title: 'Upload & Download', files: files });
     });
   });
 });
