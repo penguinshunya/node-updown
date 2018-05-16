@@ -3,7 +3,7 @@ version: '3.1'
 services:
 
   node:
-    image: node
+    image: node:10.1.0
     restart: always
     ports:
       - 8000:80
@@ -16,7 +16,7 @@ services:
       bash -c "cd /share && npm install && npm start"
 
   mongo:
-    image: mongo
+    image: mongo:3.6.4
     restart: always
     volumes:
       - ./data:/data/db
