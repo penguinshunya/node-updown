@@ -6,9 +6,23 @@ block stylesheet
 block filebox
   .file.mb-3.shadow
     .file-body
-      .file-text: a(href='/download/{{ file.filename }}') {{ file.originalname }}
-      .d-flex.justify-content-between.align-items-center
-        button.delete.btn.btn-sm.btn-outline-secondary(type='button', data-filename='{{ file.filename }}') 削除
+      .file-text
+        a(href='/download/{{ file.filename }}', ng-hide='file.showprogress')
+          {{ file.originalname }}
+        span(ng-show='file.showprogress')
+          {{ file.originalname }}
+      .progress(ng-show='file.showprogress')
+        .progress-bar(
+          role='progressbar',
+          style='width: {{ file.progress }}%',
+          aria-valuenum='{{ file.progress }}',
+          aria-valuemin='0',
+          aria-valuemax='100')
+      .d-flex.justify-content-between.align-items-center.buttonDisplay
+        button.delete.btn.btn-sm.btn-outline-secondary(
+          type='button',
+          ng-hide='file.showprogress'
+          data-filename='{{ file.filename }}') 削除
 
 block content
   .container(ng-controller='UpdownController')
