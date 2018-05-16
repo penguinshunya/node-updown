@@ -12,16 +12,17 @@ router.get('/', function(req, res, next) {
 
 /* POST upload files. */
 router.post('/upload', upload.single('file'), function(req, res, next) {
-  file.insert({
+  const obj = {
     filename: req.file.filename,
     originalname: req.file.originalname,
     mimetype: req.file.mimetype,
-    size: req.file.size
-  }, function() {
-    res.end(JSON.stringify({
-      filename: req.file.filename,
-      originalname: req.file.originalname
-    }));
+    size: req.file.size,
+    // TODO 追加日時が日本の時間ではない
+    //      クライアント側で日時を生成する方法がベスト・プラクティス？
+    date: Date()
+  };
+  file.insert(obj, function() {
+    res.end(JSON.stringify(obj));
   });
 });
 

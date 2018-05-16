@@ -20,6 +20,7 @@ angular.module('updownApp', [])
       $.each(files, function(_, file) {
         const data = new FormData();
         data.append('file', file);
+        data.append('date', 'test');
 
         const obj = {
           originalname: file.name,
@@ -36,10 +37,25 @@ angular.module('updownApp', [])
             }
           }
         }).then(function(data) {
-          obj.filename = data.data.filename;
+          assign(obj, data.data);
           obj.showprogress = false;
         });
       });
+    });
+
+    $('#files').on('click', '.download', function(e) {
+      const filename = $(e.target).data('filename');
+      window.location.href = `/download/${filename}`;
+    });
+
+    $('#fileModal').on('show.bs.modal', function (e) {
+      const button = $(e.relatedTarget);
+      const modal = $(this);
+      // TODO AngularJSを使うことで綺麗に書ける気がする部分
+      modal.find('.modal-file-name').text(button.data('originalname'));
+      modal.find('.modal-file-type').text(button.data('mimetype'));
+      modal.find('.modal-file-size').text(button.data('size') + ' Byte');
+      modal.find('.modal-file-date').text(button.data('date'));
     });
 
     $('#files').on('click', '.delete', function(e) {

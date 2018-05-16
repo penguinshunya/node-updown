@@ -4,31 +4,60 @@ block stylesheet
   link(rel='stylesheet', href='/stylesheets/index.css')
 
 block filebox
-  .file.mb-3.shadow
-    .file-body
-      .file-text
-        a(href='/download/{{ file.filename }}', ng-hide='file.showprogress')
-          {{ file.originalname }}
-        span(ng-show='file.showprogress')
-          {{ file.originalname }}
-      .progress(ng-show='file.showprogress')
-        .progress-bar(
-          role='progressbar',
-          style='width: {{ file.progress }}%',
-          aria-valuenum='{{ file.progress }}',
-          aria-valuemin='0',
-          aria-valuemax='100')
-      .d-flex.justify-content-between.align-items-center.buttonDisplay
-        button.delete.btn.btn-sm.btn-outline-secondary(
-          type='button',
-          ng-hide='file.showprogress'
-          data-filename='{{ file.filename }}') 削除
+  .card.shadow.bg-light
+    .card-header {{ file.originalname }}
+    .card-body
+      .card-text
+        .progress(ng-show='file.showprogress')
+          .progress-bar(
+            role='progressbar'
+            style='width: {{ file.progress }}%'
+            aria-valuenum='{{ file.progress }}'
+            aria-valuemin='0'
+            aria-valuemax='100')
+        .justify-content-between.align-items-center.buttonDisplay(ng-hide='file.showprogress')
+          button.download.btn.btn-sm.btn-outline-primary.btn-block(
+            type='button',
+            data-filename='{{ file.filename }}') ダウンロード
+          button.btn.information.btn-sm.btn-outline-success.btn-block(
+            type='button'
+            data-filename='{{ file.filename }}'
+            data-originalname='{{ file.originalname }}'
+            data-mimetype='{{ file.mimetype }}'
+            data-size='{{ file.size }}'
+            data-date='{{ file.date }}'
+            data-toggle='modal'
+            data-target='#fileModal') 情報
+          button.delete.btn.btn-sm.btn-outline-danger.btn-block(
+            type='button'
+            data-filename='{{ file.filename }}') 削除
 
 block content
   .container(ng-controller='UpdownController')
-    .row#files
-      .file-box.col-md-3(ng-repeat='file in files')
+    #files.row
+      .col-md-2.mb-3(ng-repeat='file in files')
         block filebox
+  #fileModal.modal.fade(tabindex='-1' role='dialog' aria-labelledby='fileModalLabel' aria-hidden='true')
+    .modal-dialog(role='document')
+      .modal-content
+        .modal-header
+          #fileModalLabel.modal-title ファイル情報
+          button.close(type='button', data-dismiss='modal', aria-label='Close')
+            span(aria-hidden='true') &times;
+        .modal-body
+          .row
+            .col-md-3 ファイル名
+            .col-md-9.modal-file-name
+          .row
+            .col-md-3 MIMEタイプ
+            .col-md-9.modal-file-type
+          .row
+            .col-md-3 サイズ
+            .col-md-9.modal-file-size
+          .row
+            .col-md-3 追加日時
+            .col-md-9.modal-file-date
 
 block javascript
+  script(src='/javascripts/functions.js')
   script(src='/javascripts/index.js')

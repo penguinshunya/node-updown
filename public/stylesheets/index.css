@@ -1,7 +1,12 @@
-.file-body {
-	padding: 1.25rem;
+body {
+	font-family: Ricty;
+	background-color: #fafafa;
+	padding: 1rem;
 }
 
-.file-text {
-	margin-bottom: 1rem;
+button,
+.card-header {
+	overflow: hidden;
+	text-overflow: ellipsis;
+	white-space: nowrap;
 }
