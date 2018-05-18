@@ -7,6 +7,10 @@ app.controller('UpdownController', ['$scope', '$http', function($scope, $http) {
     $scope.files = data.data;
   });
 
+  $scope.isImage = (type) => /^image/.test(type);
+  $scope.isAudio = (type) => /^audio/.test(type);
+  $scope.isVideo = (type) => /^video/.test(type);
+
   $scope.filesDrop = function(files) {
     for (let file of files) {
       uploadFile(file);
@@ -21,6 +25,10 @@ app.controller('UpdownController', ['$scope', '$http', function($scope, $http) {
       size: (+data.size).toLocaleString() + ' Byte',
       date: data.date
     };
+  };
+
+  $scope.deleteFileData = function() {
+    $scope.modal = {};
   };
 
   $scope.deleteFile = function(filename) {

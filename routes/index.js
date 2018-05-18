@@ -17,8 +17,7 @@ router.post('/upload', upload.single('file'), function(req, res, next) {
     originalname: req.file.originalname,
     mimetype: req.file.mimetype,
     size: req.file.size,
-    // TODO 追加日時が日本の時間ではない
-    //      クライアント側で日時を生成する方法がベスト・プラクティス？
+    // TODO not locale time
     date: Date()
   };
   file.insert(obj, function() {
@@ -31,6 +30,18 @@ router.get('/download/:filename', function(req, res, next) {
   const filename = req.params.filename;
   file.single({ filename: filename }, function(file) {
     res.download(`./uploads/${filename}`, file.originalname);
+  });
+});
+
+/* GET file. */
+/* use src attribute of img/audio/video element */
+router.get('/files/:filename', function(req, res, next) {
+  const filename = req.params.filename;
+  file.single({ filename: filename }, function(file) {
+    // not to download in 'open by new tab' of web browser
+    res.type(file.mimetype);
+    // TODO absolute path
+    res.sendFile(`/share/uploads/${filename}`);
   });
 });
 

@@ -13,6 +13,16 @@ body {
   padding: 1rem;
 }
 
+#fileModal img,
+#fileModal audio,
+#fileModal video {
+  max-width: 100%;
+}
+
+#fileModal img {
+  max-height: 16rem;
+}
+
 .card {
   cursor: pointer;
 }

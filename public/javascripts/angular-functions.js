@@ -45,4 +45,18 @@ const defineDirectives = function(app) {
       }
     };
   });
+
+  app.directive('ngHiddenBsModal', function($parse) {
+    return {
+      restrict: 'A',
+      link: function($scope, element, attrs) {
+        element.bind('hidden.bs.modal', function(event) {
+          let fn = $parse(attrs.ngHiddenBsModal);
+          $scope.$apply(function() {
+            fn($scope, { $event: event });
+          });
+        });
+      }
+    };
+  });
 };
