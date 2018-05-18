@@ -1,12 +1,25 @@
-body {
-	font-family: Ricty;
-	background-color: #fafafa;
-	padding: 1rem;
+html {
+  height: 100%;
 }
 
-button,
-.card-header {
-	overflow: hidden;
-	text-overflow: ellipsis;
-	white-space: nowrap;
+body {
+  height: 100%;
+  font-family: Ricty;
+  background-color: #fafafa;
+}
+
+#wrap {
+  height: 100%;
+  padding: 1rem;
+}
+
+.card {
+  cursor: pointer;
+}
+
+.card-footer {
+  border-top: none;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }

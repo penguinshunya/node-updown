@@ -1,63 +1,69 @@
 extends template
 
 block stylesheet
-  link(rel='stylesheet', href='/stylesheets/index.css')
+  link(rel='stylesheet' href='/stylesheets/index.css')
 
 block filebox
-  .card.shadow.bg-light
-    .card-header {{ file.originalname }}
-    .card-body
+  .card.shadow.bg-light(ng-click='clickFile($event)'
+    data-filename='{{ file.filename }}'
+    data-originalname='{{ file.originalname }}'
+    data-mimetype='{{ file.mimetype }}'
+    data-size='{{ file.size }}'
+    data-date='{{ file.date }}'
+    data-toggle='modal'
+    data-target='#fileModal')
+    .card-body(ng-show='file.progress < 100')
       .card-text
-        .progress(ng-show='file.showprogress')
+        .progress
           .progress-bar(
             role='progressbar'
             style='width: {{ file.progress }}%'
             aria-valuenum='{{ file.progress }}'
             aria-valuemin='0'
             aria-valuemax='100')
-        .justify-content-between.align-items-center.buttonDisplay(ng-hide='file.showprogress')
-          button.download.btn.btn-sm.btn-outline-primary.btn-block(
-            type='button',
-            data-filename='{{ file.filename }}') ダウンロード
-          button.btn.information.btn-sm.btn-outline-success.btn-block(
-            type='button'
-            data-filename='{{ file.filename }}'
-            data-originalname='{{ file.originalname }}'
-            data-mimetype='{{ file.mimetype }}'
-            data-size='{{ file.size }}'
-            data-date='{{ file.date }}'
-            data-toggle='modal'
-            data-target='#fileModal') 情報
-          button.delete.btn.btn-sm.btn-outline-danger.btn-block(
-            type='button'
-            data-filename='{{ file.filename }}') 削除
+    .card-footer {{ file.originalname }}
 
 block content
-  .container(ng-controller='UpdownController')
-    #files.row
-      .col-md-2.mb-3(ng-repeat='file in files')
-        block filebox
-  #fileModal.modal.fade(tabindex='-1' role='dialog' aria-labelledby='fileModalLabel' aria-hidden='true')
-    .modal-dialog(role='document')
-      .modal-content
-        .modal-header
-          #fileModalLabel.modal-title ファイル情報
-          button.close(type='button', data-dismiss='modal', aria-label='Close')
-            span(aria-hidden='true') &times;
-        .modal-body
-          .row
-            .col-md-3 ファイル名
-            .col-md-9.modal-file-name
-          .row
-            .col-md-3 MIMEタイプ
-            .col-md-9.modal-file-type
-          .row
-            .col-md-3 サイズ
-            .col-md-9.modal-file-size
-          .row
-            .col-md-3 追加日時
-            .col-md-9.modal-file-date
+  div#wrap(ng-controller='UpdownController'
+    ng-dragover='filesDragover($event)'
+    ng-drop='filesDrop($event)')
+    .container
+      #files.row
+        .col-md-3.mb-3(ng-repeat='file in files')
+          block filebox
+      .text-center.alert.alert-info(ng-show='files.length == 0') can upload files by drag and drop them in window
+    #fileModal.modal.fade(tabindex='-1'
+      role='dialog'
+      aria-labelledby='fileModalLabel'
+      aria-hidden='true'
+      ng-show-bs-modal='inputFileData($data)')
+      .modal-dialog(role='document')
+        .modal-content
+          .modal-header
+            #fileModalLabel.modal-title ファイル情報
+            button.close(type='button' data-dismiss='modal' aria-label='Close')
+              span(aria-hidden='true') &times;
+          .modal-body
+            .row
+              .col-md-3 ファイル名
+              .col-md-9 {{ modal.name }}
+            .row
+              .col-md-3 MIMEタイプ
+              .col-md-9 {{ modal.type }}
+            .row
+              .col-md-3 サイズ
+              .col-md-9 {{ modal.size }}
+            .row
+              .col-md-3 追加日時
+              .col-md-9 {{ modal.date }}
+          .modal-footer
+            a.btn.btn-sm.btn-outline-primary(role='button'
+              href='/download/{{ modal.filename }}') ダウンロード
+            button.btn.btn-sm.btn-outline-danger(
+              type='button'
+              ng-click='deleteFile(modal.filename)'
+              data-toggle='modal'
+              data-target='#fileModal') 削除
 
 block javascript
-  script(src='/javascripts/functions.js')
   script(src='/javascripts/index.js')

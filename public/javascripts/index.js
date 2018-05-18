@@ -1,67 +1,60 @@
-angular.module('updownApp', [])
-  .controller('UpdownController', ['$scope', '$http', function($scope, $http) {
-    $http.get('/files/').then(function(data) {
-      $scope.files = data.data.map(function(obj) {
-        obj.showprogress = false;
-        return obj;
-      });
+const app = angular.module('updownApp', []);
+
+defineDirectives(app);
+
+app.controller('UpdownController', ['$scope', '$http', function($scope, $http) {
+  $http.get('/files/').then(function(data) {
+    $scope.files = data.data;
+  });
+
+  $scope.filesDragover = function(e) {
+    e.stopPropagation();
+    e.preventDefault();
+  };
+
+  $scope.filesDrop = function(e) {
+    e.stopPropagation();
+    e.preventDefault();
+
+    const files = e.originalEvent.dataTransfer.files;
+    $.each(files, function(_, file) { uploadFile(file); });
+  };
+
+  $scope.inputFileData = function(data) {
+    $scope.modal = {
+      filename: data.filename,
+      name: data.originalname,
+      type: data.mimetype,
+      size: (+data.size).toLocaleString() + ' Byte',
+      date: data.date
+    };
+  };
+
+  $scope.deleteFile = function(filename) {
+    $http.delete(`/files/${filename}`).then(function() {
+      $scope.files = $scope.files.filter(file => file.filename != filename);
     });
+  };
 
-    $('html').on('dragover', function(e) {
-      e.stopPropagation();
-      e.preventDefault();
+  const uploadFile = function(file) {
+    const data = new FormData();
+    data.append('file', file);
+
+    const obj = {
+      originalname: file.name,
+      progress: 0
+    };
+    $scope.files.push(obj);
+
+    $http.post('/upload', data, {
+      headers: { 'Content-Type': undefined },
+      uploadEventHandlers: {
+        progress: function(e) {
+          obj.progress = e.loaded / e.total * 100;
+        }
+      }
+    }).then(function(data) {
+      assign(obj, data.data);
     });
-
-    $('html').on('drop', function(e) {
-      e.stopPropagation();
-      e.preventDefault();
-
-      const files = e.originalEvent.dataTransfer.files;
-      $.each(files, function(_, file) {
-        const data = new FormData();
-        data.append('file', file);
-        data.append('date', 'test');
-
-        const obj = {
-          originalname: file.name,
-          progress: 0,
-          showprogress: true,
-        };
-        $scope.files.push(obj);
-
-        $http.post('/upload', data, {
-          headers: { 'Content-type': undefined },
-          uploadEventHandlers: {
-            progress: function(e) {
-              obj.progress = e.loaded / e.total * 100;
-            }
-          }
-        }).then(function(data) {
-          assign(obj, data.data);
-          obj.showprogress = false;
-        });
-      });
-    });
-
-    $('#files').on('click', '.download', function(e) {
-      const filename = $(e.target).data('filename');
-      window.location.href = `/download/${filename}`;
-    });
-
-    $('#fileModal').on('show.bs.modal', function (e) {
-      const button = $(e.relatedTarget);
-      const modal = $(this);
-      // TODO AngularJSを使うことで綺麗に書ける気がする部分
-      modal.find('.modal-file-name').text(button.data('originalname'));
-      modal.find('.modal-file-type').text(button.data('mimetype'));
-      modal.find('.modal-file-size').text(button.data('size') + ' Byte');
-      modal.find('.modal-file-date').text(button.data('date'));
-    });
-
-    $('#files').on('click', '.delete', function(e) {
-      const filename = $(e.target).data('filename');
-      $http.delete(`/files/${filename}`).then(function() {
-        $scope.files = $scope.files.filter(file => file.filename != filename);
-      });
-    });
-  }]);
+  };
+}]);
