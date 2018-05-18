@@ -12,22 +12,22 @@ block filebox
     data-date='{{ file.date }}'
     data-toggle='modal'
     data-target='{{ file.progress < 100 ? "" : "#fileModal" }}')
-    .card-body(ng-show='file.progress < 100')
-      .card-text
-        .progress
+    .card-body
+      .card-text(ng-hide='file.progress < 100')
+        {{ file.originalname }}
+      .progress(ng-show='file.progress < 100')
           .progress-bar(
             role='progressbar'
             style='width: {{ file.progress }}%'
             aria-valuenum='{{ file.progress }}'
             aria-valuemin='0'
             aria-valuemax='100')
-    .card-footer {{ file.originalname }}
 
 block content
   #wrap(ng-controller='UpdownController' ng-dragover ng-files-drop='filesDrop($files)')
     .container
       #files.row
-        .col-md-4.mb-3(ng-repeat='file in files')
+        .col-md-3.mb-3(ng-repeat='file in files')
           block filebox
       .text-center(ng-show='files.length == 0') can upload files by drag and drop them in this area
     #fileModal.modal(tabindex='-1'

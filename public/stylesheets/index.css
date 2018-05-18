@@ -17,17 +17,22 @@ body {
 #fileModal audio,
 #fileModal video {
   max-width: 100%;
+  margin-bottom: 1rem;
 }
 
 #fileModal img {
   max-height: 16rem;
 }
 
+.progress {
+  height: 1.5rem;
+}
+
 .card {
   cursor: pointer;
 }
 
-.card-footer {
+.card-text {
   border-top: none;
   overflow: hidden;
   text-overflow: ellipsis;
