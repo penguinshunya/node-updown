@@ -24,13 +24,13 @@ block filebox
     .card-footer {{ file.originalname }}
 
 block content
-  div#wrap(ng-controller='UpdownController' ng-dragover ng-files-drop='filesDrop($files)')
+  #wrap(ng-controller='UpdownController' ng-dragover ng-files-drop='filesDrop($files)')
     .container
       #files.row
         .col-md-4.mb-3(ng-repeat='file in files')
           block filebox
       .text-center(ng-show='files.length == 0') can upload files by drag and drop them in this area
-    #fileModal.modal.fade(tabindex='-1'
+    #fileModal.modal(tabindex='-1'
       role='dialog'
       aria-labelledby='fileModalLabel'
       aria-hidden='true'
@@ -60,9 +60,9 @@ block content
               .col-md-3 追加日時
               .col-md-9 {{ modal.date }}
           .modal-footer
-            a.btn.btn-sm.btn-outline-primary(role='button'
+            a.btn.btn-sm.btn-primary(role='button'
               href='/download/{{ modal.filename }}') ダウンロード
-            button.btn.btn-sm.btn-outline-danger(
+            button.btn.btn-sm.btn-danger(
               type='button'
               ng-click='deleteFile(modal.filename)'
               data-toggle='modal'

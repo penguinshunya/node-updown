@@ -47,8 +47,10 @@ app.controller('UpdownController', ['$scope', '$http', function($scope, $http) {
     };
     $scope.files.push(obj);
 
-    $http.post('/upload', data, {
+    $http.post(`/upload`, data, {
       headers: { 'Content-Type': undefined },
+      // to save datetime to start upload file in client
+      params: { date: (new Date()).toLocaleString() },
       uploadEventHandlers: {
         progress: function(e) {
           obj.progress = e.loaded / e.total * 100;

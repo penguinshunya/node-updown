@@ -2,6 +2,7 @@ var express = require('express');
 var multer = require('multer');
 var fs = require('fs');
 var file = require('./file');
+var path = require('path');
 var router = express.Router();
 var upload = multer({ dest: './uploads/' });
 
@@ -17,8 +18,7 @@ router.post('/upload', upload.single('file'), function(req, res, next) {
     originalname: req.file.originalname,
     mimetype: req.file.mimetype,
     size: req.file.size,
-    // TODO not locale time
-    date: Date()
+    date: req.query.date
   };
   file.insert(obj, function() {
     res.end(JSON.stringify(obj));
@@ -40,8 +40,8 @@ router.get('/files/:filename', function(req, res, next) {
   file.single({ filename: filename }, function(file) {
     // not to download in 'open by new tab' of web browser
     res.type(file.mimetype);
-    // TODO absolute path
-    res.sendFile(`/share/uploads/${filename}`);
+    // if don't use join function, raise 403 ForbiddenError
+    res.sendFile(path.join(__dirname, `../uploads/${filename}`));
   });
 });
 
