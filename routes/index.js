@@ -26,7 +26,7 @@ router.post('/upload', upload.single('file'), function(req, res, next) {
 });
 
 /* GET download file. */
-router.get('/download/:filename', function(req, res, next) {
+router.get('/download/:filename([0-9a-f]{32})', function(req, res, next) {
   const filename = req.params.filename;
   file.single({ filename: filename }, function(file) {
     res.download(`./uploads/${filename}`, file.originalname);
@@ -35,7 +35,7 @@ router.get('/download/:filename', function(req, res, next) {
 
 /* GET file. */
 /* use src attribute of img/audio/video element */
-router.get('/files/:filename', function(req, res, next) {
+router.get('/files/:filename([0-9a-f]{32})', function(req, res, next) {
   const filename = req.params.filename;
   file.single({ filename: filename }, function(file) {
     // not to download in 'open by new tab' of web browser
@@ -53,7 +53,7 @@ router.get('/files/', function(req, res, next) {
 });
 
 /* DELETE file. */
-router.delete('/files/:filename', function(req, res, next) {
+router.delete('/files/:filename([0-9a-f]{32})', function(req, res, next) {
   const filename = req.params.filename;
   file.delete({ filename: filename }, function() {
     fs.unlink(`./uploads/${filename}`, function() {
