@@ -7,17 +7,10 @@ app.controller('UpdownController', ['$scope', '$http', function($scope, $http) {
     $scope.files = data.data;
   });
 
-  $scope.filesDragover = function(e) {
-    e.stopPropagation();
-    e.preventDefault();
-  };
-
-  $scope.filesDrop = function(e) {
-    e.stopPropagation();
-    e.preventDefault();
-
-    const files = e.originalEvent.dataTransfer.files;
-    $.each(files, function(_, file) { uploadFile(file); });
+  $scope.filesDrop = function(files) {
+    for (let file of files) {
+      uploadFile(file);
+    }
   };
 
   $scope.inputFileData = function(data) {

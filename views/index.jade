@@ -24,14 +24,12 @@ block filebox
     .card-footer {{ file.originalname }}
 
 block content
-  div#wrap(ng-controller='UpdownController'
-    ng-dragover='filesDragover($event)'
-    ng-drop='filesDrop($event)')
+  div#wrap(ng-controller='UpdownController' ng-dragover ng-files-drop='filesDrop($files)')
     .container
       #files.row
-        .col-md-3.mb-3(ng-repeat='file in files')
+        .col-md-2.mb-3(ng-repeat='file in files')
           block filebox
-      .text-center.alert.alert-info(ng-show='files.length == 0') can upload files by drag and drop them in window
+      .text-center(ng-show='files.length == 0') can upload files by drag and drop them in window
     #fileModal.modal.fade(tabindex='-1'
       role='dialog'
       aria-labelledby='fileModalLabel'

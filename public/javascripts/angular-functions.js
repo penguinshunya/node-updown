@@ -6,6 +6,9 @@ const defineDirectives = function(app) {
         element.bind('dragover', function(event) {
           let fn = $parse(attrs.ngDragover);
           $scope.$apply(function() {
+            // I think that it is better to cancel the default behavior
+            event.stopPropagation();
+            event.preventDefault();
             fn($scope, { $event: event });
           });
         });
@@ -13,14 +16,16 @@ const defineDirectives = function(app) {
     };
   });
 
-  app.directive('ngDrop', function($parse) {
+  app.directive('ngFilesDrop', function($parse) {
     return {
       restrict: 'A',
       link: function($scope, element, attrs) {
         element.bind('drop', function(event) {
-          let fn = $parse(attrs.ngDrop);
+          let fn = $parse(attrs.ngFilesDrop);
           $scope.$apply(function() {
-            fn($scope, { $event: event });
+            event.stopPropagation();
+            event.preventDefault();
+            fn($scope, { $files: event.originalEvent.dataTransfer.files });
           });
         });
       }
@@ -31,7 +36,7 @@ const defineDirectives = function(app) {
     return {
       restrict: 'A',
       link: function($scope, element, attrs) {
-        $(element).on('show.bs.modal', function(event) {
+        element.bind('show.bs.modal', function(event) {
           let fn = $parse(attrs.ngShowBsModal);
           $scope.$apply(function() {
             fn($scope, { $event: event, $data: event.relatedTarget.dataset });
